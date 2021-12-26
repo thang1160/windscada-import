@@ -1,35 +1,30 @@
 package com.example;
 
 import java.sql.Timestamp;
+import java.util.logging.Logger;
 import com.example.dao.GetConnection;
 
-/**
- * Hello world!
- */
 public final class App extends Thread {
+    private static final Logger logger = Logger.getLogger(App.class.getName());
+
     private App() {}
 
-    /**
-     * Says hello to the world.
-     * 
-     * @param args The arguments of the program.
-     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         GetConnection.getConnection();
         App t1 = new App();
-        Thread th = new Thread(t1);
-        th.start();
+        t1.start();
     }
 
+    @Override
     public void run() {
         while (true) {
             try {
-                Thread.currentThread().sleep(5000);
-                System.out.println("start insert");
+                logger.info("start insert");
                 Timestamp timeStamp1 = new Timestamp(System.currentTimeMillis());
                 GetConnection.infiny(timeStamp1);
-            } catch (Exception e) {
-                System.out.println(e);
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
